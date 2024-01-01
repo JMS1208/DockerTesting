@@ -1,0 +1,110 @@
+.container {
+    padding: 10vh 10vw;
+}
+
+.logo-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.logo-img {
+    width: 4rem;
+}
+
+.logo-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.input-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2em;
+    margin-top: 2em;
+}
+
+.input-title {
+    display: flex;
+    justify-content: start;
+    width: 100%;
+    text-align: start;
+    font-weight: 600;
+}
+
+.button-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 2em;
+    padding: 0;
+}
+
+.error-message {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #FF3D00;
+    margin-bottom: 0.5em;
+    width: 100%;
+}
+
+.signup-section {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-top: 0.5em;
+    width: 100%;
+    gap: 0.4em;
+}
+
+.signup-comment {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.signup-button {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0078FF;
+    cursor: pointer;
+}
+
+@media (max-width: 400px) {
+    .container {
+        min-width: 400px;
+    }
+    .input-section {
+        min-width: 400px;
+    }
+    .button-section {
+        min-width: 400px;
+    }
+}
+
+@media (min-width: 660px) {
+    .container {
+        padding: 10vh 20vw;
+    }
+
+}
+
+@media (min-width: 800px) {
+    .container {
+        padding: 10vh 30vw;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        padding: 10vh 35vw;
+    }
+}

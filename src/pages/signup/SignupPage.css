@@ -1,0 +1,124 @@
+
+.container {
+    padding: 10vh 10vw;
+}
+
+.signup-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.input-section {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.3em;
+}
+
+.input-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.input-title-checkbox {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.checkbox-comment {
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.input-inner-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    /*gap: 0.5em;*/
+    padding: 0;
+}
+
+.input-inner-section div {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.password-error-comment,
+.email-error-comment {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #FF3D00;
+}
+
+.password-error-comment {
+    text-align: start;
+}
+
+.email-correct-comment {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #0078FF;
+}
+
+.email-correct-comment,
+.email-error-comment {
+    text-align: end;
+}
+
+.code-input-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    /*gap: 0.5em;*/
+    padding: 0;
+}
+
+.not-yet-comment {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.resend-button {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #0078FF;
+    cursor: pointer;
+}
+
+.left-time {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #FF3D00;
+}
+
+@media (max-width: 400px) {
+    .container {
+        min-width: 400px;
+    }
+    .input-section {
+        min-width: 400px;
+    }
+}
+
+@media (min-width: 660px) {
+    .container {
+        padding: 10vh 20vw;
+    }
+}
+
+@media (min-width: 800px) {
+    .container {
+        padding: 10vh 20vw;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        padding: 10vh 20vw;
+    }
+}

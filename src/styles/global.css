@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+html {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 16px;
+}
+
+/*<!-- 스크롤 안생기게 -->*/
+body {
+    overflow-x: hidden;
+    color: rgb(29, 29, 31);
+    letter-spacing: -0.05em;
+    background: white;
+}
+
+/*<!-- 밑줄 없앰 -->*/
+a {
+    color: rgb(29, 29, 31);
+    text-decoration: none;
+}
