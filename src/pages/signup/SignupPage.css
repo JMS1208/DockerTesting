@@ -21,6 +21,11 @@
     font-weight: 700;
 }
 
+.department-subtitle{
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
 .input-title-checkbox {
     display: flex;
     justify-content: space-between;

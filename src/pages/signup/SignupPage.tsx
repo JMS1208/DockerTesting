@@ -1,29 +1,25 @@
+import * as React from "react";
 import {ReactElement, useEffect, useState} from "react";
 import './SignupPage.css';
-import {Box, Button, Checkbox, Container, FormControlLabel, Stack, TextField} from "@mui/material";
+import {Box, Button, Checkbox, CircularProgress, FormControlLabel, Stack, TextField} from "@mui/material";
 import {useNavigate} from 'react-router-dom';
 import {
-    DepartmentContentSx,
     EmailAtSx,
     EmailDomainTextFieldSx,
     EmailNameTextFieldSx,
     EmailVerifyButtonSx,
-    PasswordTextFieldSx, SendCodeButtonSx
+    PasswordTextFieldSx,
+    SendCodeButtonSx
 } from "./SignupSx";
 import {PolicyContent} from "./PolicyContent";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../store";
 import {checkEmailAction} from "../../store/auth/signup/CheckEmailActions";
-import {verifyEmailCodeAction, VerifyEmailCodeResponseDto} from "../../store/auth/signup/VerifyEmailCodeActions";
+import {verifyEmailCodeAction} from "../../store/auth/signup/VerifyEmailCodeActions";
 import {sendEmailCodeAction} from "../../store/auth/signup/SendEmailCodeActions";
-import config from "../../config/config";
-import * as React from "react";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import appConfig from "../../config/appConfig";
 import {DepartmentChip} from "./DepartmentChip";
-import signUp from "../../store/auth/signup/SignUp";
-import { signUpAction } from "../../store/auth/signup/SignUpActions";
+import {signUpAction} from "../../store/auth/signup/SignUpActions";
 
 const SignupPage = (): ReactElement => {
 
@@ -40,7 +36,6 @@ const SignupPage = (): ReactElement => {
 
     const expiredAt = useSelector((state: RootState) => state.signUp.expiredAt);
 
-    // const codeValid = useSelector((state: RootState)=> state.signUp.codeValid);
 
     const [emailFront, setEmailFront] = useState('');
 
@@ -78,40 +73,37 @@ const SignupPage = (): ReactElement => {
     //이메일 인증 코드 인증 된 경우
     const [codeValid, setCodeValid] = useState(false);
 
-    //학부들
-    const [selectedDepartments, setSelectedDepartments] = useState<Set<number>>(new Set());
-
-    //학부 목록
-    const departments = new Map<number, string>([
-        [1, "소프트웨어학부"]
+    const initialDepartments = new Map<number, [string, boolean]>([
+        [1, ["소프트웨어학부", false]],
+        [2, ["경영학부", false]],
+        [3, ["간호학과", false]],
+        [4, ["기계공학부", false]],
+        [5, ["건축학부", false]],
+        [6, ["융합공학부", false]],
+        [7, ["첨단소재공학과", false]],
+        [8, ["화학신소재공학부", false]],
+        [9, ["공공인재학부", false]]
+        // 다른 학부들 추가
     ]);
 
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
+    // departments를 컴포넌트의 상태로 설정
+    const [departments, setDepartments] = useState(initialDepartments);
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
     const handleMenuItemClick = (departmentId: number) => {
-        setSelectedDepartments(prevDepartments => {
-            const newDepartments = new Set(prevDepartments);
-            if (newDepartments.has(departmentId)) {
-                newDepartments.delete(departmentId); // 이미 선택된 학부이면 제거
-            } else {
-                newDepartments.add(departmentId); // 선택되지 않은 학부이면 추가
+        setDepartments(prevDepartments => {
+            const newDepartments = new Map(prevDepartments);
+            const department = newDepartments.get(departmentId);
+            if (department) {
+                // 선택 상태를 토글
+                newDepartments.set(departmentId, [department[0], !department[1]]);
             }
             return newDepartments;
         });
-        handleClose();
     };
 
     const sendCodeButtonClicked = () => {
-        if(!verifiedEmail) {
+        if (!verifiedEmail) {
             return;
         }
         dispatch(sendEmailCodeAction({email: verifiedEmail}));
@@ -122,16 +114,16 @@ const SignupPage = (): ReactElement => {
     };
 
     const verifyCodeClicked = () => {
-        if(!verifiedEmail) {
+        if (!verifiedEmail) {
             return;
         }
         dispatch(verifyEmailCodeAction({email: verifiedEmail, code: code}))
             .unwrap()
-            .then((responseDto)=>{
+            .then((responseDto) => {
                 const result = responseDto.result;
                 setCodeValid(result);
 
-                if(!result) {
+                if (!result) {
                     alert("인증코드가 올바르지 않습니다.");
                 }
             });
@@ -139,18 +131,24 @@ const SignupPage = (): ReactElement => {
     };
 
     const signUpButtonClicked = () => {
-        if(!verifiedEmail) {
+        if (!verifiedEmail) {
             return;
         }
 
-        dispatch(signUpAction({email: verifiedEmail, password: password, departments: Array.from(selectedDepartments)}))
+        dispatch(signUpAction({
+            email: verifiedEmail, password: password, departments: Array.from(departments)
+                .filter(([key, value]) => value[1]) // value[1]는 boolean 값을 나타냅니다.
+                .map(([key, value]) => key)
+        }))
             .unwrap()
-            .then((responseData)=> {
-                if(responseData.result) {
-                    navigate(config.pageUrl.signIn);
+            .then((response) => {
+                if (response.result === true) {
+                    navigate(appConfig.pageUrl.signIn);
+                } else {
+                    alert(response.message);
                 }
             })
-            .catch(()=> {
+            .catch(() => {
                 alert("회원가입 실패");
             });
     };
@@ -159,7 +157,7 @@ const SignupPage = (): ReactElement => {
     useEffect(() => {
         // 남은 시간을 계산하고 포맷팅하는 함수
         const calculateRemainingTime = () => {
-            if(codeValid === true) {
+            if (codeValid) {
                 clearInterval(intervalId);
                 return;
             }
@@ -188,7 +186,7 @@ const SignupPage = (): ReactElement => {
     }, [expiredAt]);
 
     //이메일 중복 확인 전 검사
-    useEffect(()=> {
+    useEffect(() => {
         setCompareEmail(
             emailFront.length > 0 && emailBack.length > 0 &&
             emailFront === verifyingEmailFront &&
@@ -293,7 +291,8 @@ const SignupPage = (): ReactElement => {
                         비밀번호
                     </div>
                     <Stack direction='row' spacing={1}>
-                        <TextField disabled={codeValid} type='password' sx={PasswordTextFieldSx} value={password} onChange={(e)=> setPassword(e.target.value)}/>
+                        <TextField disabled={codeValid} type='password' sx={PasswordTextFieldSx} value={password}
+                                   onChange={(e) => setPassword(e.target.value)}/>
 
                         <Box sx={{width: '20%'}}/>
                     </Stack>
@@ -309,7 +308,8 @@ const SignupPage = (): ReactElement => {
                         비밀번호 확인
                     </div>
                     <Stack direction='row' spacing={1}>
-                        <TextField disabled={codeValid} type='password' sx={PasswordTextFieldSx} value={verifyingPassword} onChange={(e)=> setVerifyingPassword(e.target.value)}/>
+                        <TextField disabled={codeValid} type='password' sx={PasswordTextFieldSx}
+                                   value={verifyingPassword} onChange={(e) => setVerifyingPassword(e.target.value)}/>
                         <Box sx={{width: '20%'}}/>
                     </Stack>
                     {
@@ -320,19 +320,31 @@ const SignupPage = (): ReactElement => {
                 </div>
 
                 <div className='input-section'>
-                    <div className='input-title'>
-                        알림 받을 학과 / 학부
-                    </div>
-                    <Stack direction='row' spacing={1}>
-                        <div style={{ flex: 1 , overflowX: 'auto', display: 'flex', justifyContent:'start', alignItems:'center' , gap: '0.6em'}}>
-                            {Array.from(departments.entries()).map(([id, name]) => (
-                                <DepartmentChip key={id} id={id} name={name} clicked={()=> {
-                                    handleMenuItemClick(id)
-                                }}/>
-                            ))}
+                    <Stack direction='row' justifyContent='space-between' alignItems='baseline'>
+                        <div className='input-title'>
+                            알림 받을 학과 / 학부
                         </div>
-                        <Box sx={{width: '20%'}}/>
+                        <div className='department-subtitle'>
+                            {`${Array.from(departments)
+                                .filter(([key, value]) => value[1]) // value[1]는 boolean 값을 나타냅니다.
+                                .map(([key, value]) => key).length}/${departments.size}`}
+                        </div>
                     </Stack>
+
+                    <div style={{
+                        flex: 1,
+                        overflowX: 'auto',
+                        display: 'flex',
+                        justifyContent: 'start',
+                        alignItems: 'center',
+                        gap: '0.6em',
+                        flexWrap: 'wrap',
+                    }}>
+                        {Array.from(departments.entries()).map(([id, [name, selected]]) => (
+                            <DepartmentChip key={id} id={id} name={name} selected={selected}
+                                            clicked={() => handleMenuItemClick(id)}/>
+                        ))}
+                    </div>
                 </div>
 
                 <div className='input-section'>
@@ -342,7 +354,9 @@ const SignupPage = (): ReactElement => {
                         </div>
                         <FormControlLabel
                             value="start"
-                            control={<Checkbox disabled={codeValid} checked={agree} onChange={(e)=> setAgree(e.target.checked)} sx={{'& .MuiSvgIcon-root': {fontSize: '1em'}}}/>}
+                            control={<Checkbox disabled={codeValid} checked={agree}
+                                               onChange={(e) => setAgree(e.target.checked)}
+                                               sx={{'& .MuiSvgIcon-root': {fontSize: '1em'}}}/>}
                             label={
                                 <div className='checkbox-comment'>
                                     동의합니다
@@ -361,7 +375,8 @@ const SignupPage = (): ReactElement => {
                                 인증 코드
                             </div>
                             <Stack direction='row' spacing={1}>
-                                <TextField type='number' sx={PasswordTextFieldSx} value={code} onChange={(e)=> setCode(e.target.value)}/>
+                                <TextField type='number' sx={PasswordTextFieldSx} value={code}
+                                           onChange={(e) => setCode(e.target.value)}/>
                                 <Button disabled={code.length !== 6} sx={EmailVerifyButtonSx} onClick={verifyCodeClicked}>
                                     확인
                                 </Button>
@@ -384,12 +399,18 @@ const SignupPage = (): ReactElement => {
                 }
 
                 {
-                    !codeValid && expiredAt === null && isEmailValid && isPasswordValid && agree && <Button sx={SendCodeButtonSx} variant='contained' disableElevation onClick={sendCodeButtonClicked} >
+                    !codeValid && expiredAt === null && isEmailValid && isPasswordValid && agree &&
+                    <Button sx={SendCodeButtonSx} variant='contained' disableElevation onClick={sendCodeButtonClicked} startIcon={
+                        isLoading > 0 ? <CircularProgress size={20} sx={{color: 'white'}}/> : undefined
+                    }>
                         인증 코드 전송
                     </Button>
                 }
                 {
-                    codeValid && isEmailValid && isPasswordValid && agree && <Button sx={SendCodeButtonSx} variant='contained' disableElevation onClick={signUpButtonClicked} >
+                    codeValid && isEmailValid && isPasswordValid && agree &&
+                    <Button sx={SendCodeButtonSx} variant='contained' disableElevation onClick={signUpButtonClicked} startIcon={
+                        isLoading > 0 ? <CircularProgress size={20} sx={{color: 'white'}}/> : undefined
+                    }>
                         회원가입
                     </Button>
                 }

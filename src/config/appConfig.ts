@@ -1,5 +1,5 @@
 
-const config = {
+const appConfig = {
     pageUrl: {
         root: '/',
         signIn: '/sign-in',
@@ -13,11 +13,12 @@ const config = {
         checkEmail: '/auth-api/check-email',
         sendEmailCode: '/auth-api/send-code',
         verifyEmailCode: '/auth-api/verify-code',
-        fetchUserInfo: '/api/user-info'
+        fetchUserInfo: '/api/user-info',
+        updateDepartment: '/api/department',
+        signOut: '/api/sign-out',
+        unregister: '/api/unregister'
     },
-    baseUrl: 'http://localhost:8080',
-    refreshTokenDuration: 1, //1일
-    accessTokenDuration: 1000 * 60 * 60, //1시간
+    baseUrl: 'https://www.cau-noti.com:8443'
 }
 
-export default config;
+export default appConfig;

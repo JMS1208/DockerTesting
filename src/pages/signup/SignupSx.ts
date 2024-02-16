@@ -1,13 +1,13 @@
 import {SxProps, Theme} from "@mui/material";
 
 export const EmailNameTextFieldSx: SxProps<Theme> = {
-    flex: 3, height: '3rem', input: {
+    flex: 3.5, height: '3rem', input: {
         padding: '0.8em'
     }
 }
 
 export const EmailDomainTextFieldSx: SxProps<Theme> = {
-    flex: 5, height: '3rem', input: {
+    flex: 4.5, height: '3rem', input: {
         padding: '0.8em'
     }
 }

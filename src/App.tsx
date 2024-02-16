@@ -1,12 +1,13 @@
 import React from 'react';
 import {Navigate, Route, Routes, BrowserRouter} from 'react-router-dom';
 import './App.css';
-import config from "./config/config";
+import appConfig from "./config/appConfig";
 import RootPage from "./pages/root/RootPage";
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import SigninPage from "./pages/signin/SigninPage";
 import SignupPage from "./pages/signup/SignupPage";
 import MyPage from './pages/my/MyPage';
+import AuthErrorListener from './context/AuthErrorListener';
 
 const theme = createTheme({
     palette: {
@@ -30,11 +31,12 @@ function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <BrowserRouter>
+                <AuthErrorListener />
                 <Routes>
-                    <Route path={config.pageUrl.root} element={<RootPage/>} index/>
-                    <Route path={config.pageUrl.signIn} element={<SigninPage/>}/>
-                    <Route path={config.pageUrl.signUp} element={<SignupPage/>}/>
-                    <Route path={config.pageUrl.myPage} element={<MyPage/>}/>
+                    <Route path={appConfig.pageUrl.root} element={<RootPage/>} index/>
+                    <Route path={appConfig.pageUrl.signIn} element={<SigninPage/>}/>
+                    <Route path={appConfig.pageUrl.signUp} element={<SignupPage/>}/>
+                    <Route path={appConfig.pageUrl.myPage} element={<MyPage/>}/>
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>

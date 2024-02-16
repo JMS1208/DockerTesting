@@ -6,7 +6,7 @@ export const PolicyContent = (): ReactElement => {
     return (
         <Stack spacing={3} sx={PolicyContentSx}>
             <div>
-                중앙대 소프트학부 공지 알리미는 사용자의 개인정보를 중요시하며, 정보통신망 이용촉진 및 정보보호 등에 관한 법률을 준수하고 있습니다.
+                중앙대 학부/학과 공지 알리미는 사용자의 개인정보를 중요시하며, 정보통신망 이용촉진 및 정보보호 등에 관한 법률을 준수하고 있습니다.
                 <br/>
                 개인정보 처리 방침을 통해 수집하는 개인정보의 항목, 수집 및 이용목적, 개인정보의 파기 절차 및 방법 등을 명시하고 있습니다.
             </div>
@@ -14,7 +14,8 @@ export const PolicyContent = (): ReactElement => {
             <div>
                 1. 수집하는 개인정보의 항목 <br/>
                 알림 서비스 제공을 위해 다음과 같은 개인정보를 수집하고 있습니다.<br/>
-                - 이메일 주소
+                - 이메일
+                - 비밀번호 (암호화하여 처리)
             </div>
 
             <div>
@@ -46,7 +47,6 @@ export const PolicyContent = (): ReactElement => {
 
             <div>
                 7. 개인정보 보호책임자<br/>
-                - 이름: 전민석
                 <br/>
                 - 이메일: wjsalstjr59@gmail.com
                 <br/><br/>

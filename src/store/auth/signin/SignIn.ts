@@ -1,14 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit';
-import config from "../../../config/config";
+import appConfig from "../../../config/appConfig";
 import {signIn} from "./SignInActions";
 
 export type SignInState = {
-    isLoggedIn: boolean;
     loading: number;
 };
 
 const initialState: SignInState = {
-    isLoggedIn: false,
     loading: 0
 }
 
@@ -25,7 +23,6 @@ export const signInSlice = createSlice({
             })
             .addCase(signIn.fulfilled, (state, action) => {
                 state.loading -= 1;
-                state.isLoggedIn = action.payload.isLoggedIn;
             })
             .addCase(signIn.rejected, (state, action) => {
                 state.loading -= 1;

@@ -1,7 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
-import {apiClientWithoutAuth} from "../../../api/client/ApiClient";
-import config from "../../../config/config";
+import {apiClient} from "../../../api/client/ApiClient";
+import appConfig from "../../../config/appConfig";
 
 interface RequestDto {
     email: string;
@@ -10,20 +10,25 @@ interface RequestDto {
 }
 
 interface ResponseDto {
-    result: boolean;
+    result: boolean | string;
+    message: string;
 }
 
 export const signUpAction = createAsyncThunk(
     'auth/signUp',
     async (requestDto: RequestDto, {rejectWithValue}) => {
         try {
-            const response = await apiClientWithoutAuth.post(config.apiUrl.signUp, {
+            const response = await apiClient.post(appConfig.apiUrl.signUp, {
                 email: requestDto.email,
                 password: requestDto.password,
                 departments: requestDto.departments
             });
 
-            return response.data as ResponseDto;
+            return {
+                result: response.data.result,
+                message: response.data.message
+            }
+
         } catch (err) {
 
             if (err instanceof AxiosError && err.response) {

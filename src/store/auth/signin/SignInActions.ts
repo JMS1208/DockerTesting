@@ -1,42 +1,26 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
-import {apiClientWithoutAuth} from "../../../api/client/ApiClient";
-import config from "../../../config/config";
-import {SignInState} from "./SignIn";
-import {setAccessToken, setRefreshToken} from "../../../storage/Cookie";
-import {Sign} from "crypto";
+import {apiClient} from "../../../api/client/ApiClient";
+import appConfig from "../../../config/appConfig";
 
 export interface SignInRequestDto {
     email: string;
     password: string;
 }
 
-export interface SignInResponseDto {
-    accessToken: string;
-    refreshToken: string;
-    accessTokenExpiredAt: string;
-    refreshTokenExpiredAt: string;
-}
-
 export const signIn = createAsyncThunk(
     'auth/signIn',
     async (signInRequestDto: SignInRequestDto, {rejectWithValue}) => {
         try {
-            const response = await apiClientWithoutAuth.post(config.apiUrl.signIn, {
+            const response = await apiClient.post(appConfig.apiUrl.signIn, {
                 email: signInRequestDto.email,
                 password: signInRequestDto.password
             })
 
-            const { accessToken, refreshToken, accessTokenExpiredAt, refreshTokenExpiredAt } = response.data as SignInResponseDto;
-
-            console.log(`액세스 토큰: ${accessToken} ${accessTokenExpiredAt}`);
-            console.log(`리프래시 토큰: ${refreshToken} ${refreshTokenExpiredAt}`);
-
-            setRefreshToken(refreshToken, new Date(refreshTokenExpiredAt));
-            setAccessToken(accessToken, new Date(accessTokenExpiredAt));
+            //console.log(JSON.stringify(response, null, 2));
 
             return {
-                isLoggedIn: true
+                result: response.status === 200
             };
         } catch (err) {
 

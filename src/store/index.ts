@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import signInReducer from './auth/signin/SignIn';
 import {useDispatch} from "react-redux";
 import signUpReducer from './auth/signup/SignUp';
+import myPageReducer from './mypage/MyPage';
 
 export const appStore = configureStore({
     reducer: {
         signIn: signInReducer,
         signUp: signUpReducer,
+        myPage: myPageReducer
     },
 });
 

@@ -1,14 +1,13 @@
-import React, {ReactElement, useEffect, useState} from "react";
+import React, {ReactElement, useState} from "react";
 import './SigninPage.css';
 import logo from '../../assets/cau_logo.png';
-import {Box, Button, CircularProgress, Container, Stack, SxProps, TextField, Theme} from "@mui/material";
+import {Button, CircularProgress, SxProps, TextField, Theme} from "@mui/material";
 import {useNavigate} from 'react-router-dom';
-import config from "../../config/config";
+import appConfig from "../../config/appConfig";
 import CheckIcon from '@mui/icons-material/Check';
 import {EmailUtils} from "../../utils/email/EmailUtils";
 import {useDispatch, useSelector} from "react-redux";
-import { signIn } from "../../store/auth/signin/SignInActions";
-import { ThunkDispatch } from "@reduxjs/toolkit";
+import {signIn} from "../../store/auth/signin/SignInActions";
 import {AppDispatch, RootState} from "../../store";
 
 const buttonSx: SxProps<Theme> = {
@@ -38,19 +37,11 @@ const SigninPage = (): ReactElement => {
 
     const isLoading = useSelector((state: RootState) => state.signIn.loading);
 
-    const isLoggedIn = useSelector((state: RootState) => state.signIn.isLoggedIn);
-
     const [email, setEmail] = useState('');
 
     const [password, setPassword] = useState('');
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
-
-    useEffect(() => {
-        if (isLoggedIn) {
-            navigate(config.pageUrl.myPage); // 로그인 성공 후 이동할 경로
-        }
-    }, [isLoggedIn, navigate]);
 
     const loginButtonClicked = async () => {
         const isValid = EmailUtils.isValidEmail(email) && password.length > 0;
@@ -60,7 +51,13 @@ const SigninPage = (): ReactElement => {
             return;
         }
 
-        dispatch(signIn({email, password}));
+        dispatch(signIn({email, password}))
+            .unwrap()
+            .then((response) => {
+                if (response.result) {
+                    navigate(appConfig.pageUrl.myPage); // 로그인 성공 후 이동할 경로
+                }
+            });
     }
 
     const emailChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,16 +69,13 @@ const SigninPage = (): ReactElement => {
     }
 
     const signupButtonClicked = () => {
-        navigate(config.pageUrl.signUp);
+        navigate(appConfig.pageUrl.signUp);
     }
 
     return (
         <div className='container'>
             <section className='logo-section'>
-                <img className='logo-img' src={logo} alt='CAU LOGO'/>
-                <div className='logo-title'>
-                    중앙대학교 소프트웨어학부<br/>공지사항 알리미
-                </div>
+                중앙대학교 학과/학부 공지 알리미
             </section>
 
             <section className='input-section'>

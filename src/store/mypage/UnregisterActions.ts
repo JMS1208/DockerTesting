@@ -3,18 +3,17 @@ import {apiClient} from "../../api/client/ApiClient";
 import appConfig from "../../config/appConfig";
 import {AxiosError} from "axios";
 
-
-export const fetchUserInfoAction = createAsyncThunk(
-    'auth/fetchUserInfo',
+export const unregisterActions = createAsyncThunk(
+    'auth/unresister',
     async (_, {rejectWithValue}) => {
         try {
-            const response = await apiClient.get(appConfig.apiUrl.fetchUserInfo);
+            const response = await apiClient.get(appConfig.apiUrl.unregister);
 
             //console.log("API Response: ", JSON.stringify(response, null, 2));
             //console.log("Response Data: ", JSON.stringify(response.data, null, 2));
 
             return {
-                response: response
+                result: response.status === 200
             }
         } catch (err) {
 
@@ -30,4 +29,3 @@ export const fetchUserInfoAction = createAsyncThunk(
 
     }
 );
-

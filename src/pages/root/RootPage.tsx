@@ -3,7 +3,7 @@ import './RootPage.css';
 import logo from '../../assets/cau_logo.png';
 import {Button, Stack, SxProps, Theme} from "@mui/material";
 import { useNavigate } from 'react-router-dom';
-import config from "../../config/config";
+import appConfig from "../../config/appConfig";
 
 const buttonSx: SxProps<Theme> = {
     borderRadius: '0.5rem',
@@ -23,20 +23,17 @@ const RootPage = (): ReactElement => {
     const navigate = useNavigate();
 
     const loginButtonClicked = () => {
-        navigate(config.pageUrl.signIn);
+        navigate(appConfig.pageUrl.signIn);
     }
 
     const signUpButtonClicked = () => {
-        navigate(config.pageUrl.signUp);
+        navigate(appConfig.pageUrl.signUp);
     }
 
     return (
         <div className='container'>
             <section className='logo-section' >
-                <img className='logo-img' src={logo} alt='CAU LOGO'/>
-                <div className='logo-title'>
-                    중앙대학교 소프트웨어학부<br/>공지사항 알리미
-                </div>
+                중앙대학교 학과/학부 공지 알리미
             </section>
 
             <section className='description-section'>
@@ -44,7 +41,8 @@ const RootPage = (): ReactElement => {
                     <p>[ 서비스 안내 ]</p>
                 </div>
                 <div>
-                    1. 이 서비스는 중앙대학교 소프트웨어학부 공식 홈페이지의 공지사항 게시글이 올라온 경우 이메일로 알림을 보내주는 서비스 입니다.
+                    1. 이 서비스는 중앙대학교 학과 또는 학부의 공식 홈페이지의 공지사항 게시글이 올라온 경우 이메일로 알림을 보내주는 서비스 입니다.
+                    <br/>- 현재 이용 가능: 소프트웨어학부, 경영학부, 간호학과, 기계공학부, 건축학부, 융합공학부, 첨단소재공학과, 화학신소재공학부, 공공인재학부
                 </div>
                 <div>
                     2. 이메일 등록 후 누구나 이용 가능한 서비스 입니다.

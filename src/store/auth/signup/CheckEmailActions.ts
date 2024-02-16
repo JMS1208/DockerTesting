@@ -1,7 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
-import {apiClientWithoutAuth} from "../../../api/client/ApiClient";
-import config from "../../../config/config";
+import {apiClient} from "../../../api/client/ApiClient";
+import appConfig from "../../../config/appConfig";
 
 interface RequestDto {
     email: string;
@@ -15,7 +15,7 @@ export const checkEmailAction = createAsyncThunk(
     'auth/checkEmail',
     async (requestDto: RequestDto, {rejectWithValue}) => {
         try {
-            const response = await apiClientWithoutAuth.post(config.apiUrl.checkEmail, {
+            const response = await apiClient.post(appConfig.apiUrl.checkEmail, {
                 email: requestDto.email,
             })
 

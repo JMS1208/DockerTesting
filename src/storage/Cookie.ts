@@ -1,5 +1,5 @@
 import {Cookies} from 'react-cookie';
-import config from "../config/config";
+import appConfig from "../config/appConfig";
 
 const cookies = new Cookies();
 
